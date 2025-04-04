@@ -45,9 +45,9 @@ const Model: React.FC<ModelProps> = ({
 
     const handleUpdate = async (updatedData: Omit<ModelProps, 'id'>) => {
         try {
-            const updatedModel = await updateCarModel(id, {
+            await updateCarModel(id, {
                 ...updatedData,
-                id // Ensure ID is included in the update
+                id
             });
 
             setIsEditing(false);
@@ -63,6 +63,7 @@ const Model: React.FC<ModelProps> = ({
             setError(err instanceof Error ? err.message : 'Failed to update model');
         }
     };
+
 
     const handleDelete = async () => {
         if (!window.confirm(`Are you sure you want to delete ${brand} ${model}?`)) {
@@ -161,11 +162,11 @@ const Model: React.FC<ModelProps> = ({
 
                 <div className="mt-3">
                     <h5 className="text-success">
-                        {pricePerDay.toLocaleString('en-US', {
+                        {pricePerDay?.toLocaleString('en-US', {
                             style: 'currency',
                             currency: 'EUR',
                             minimumFractionDigits: 0
-                        })} <small className="text-muted">/ day</small>
+                        }) ?? 'N/A'} <small className="text-muted">/ day</small>
                     </h5>
                 </div>
             </div>
