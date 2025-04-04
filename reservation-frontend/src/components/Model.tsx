@@ -50,6 +50,7 @@ const Model: React.FC<ModelProps> = ({
                 id // Ensure ID is included in the update
             });
 
+
             setIsEditing(false);
             setError(null);
 
