@@ -3,7 +3,7 @@ import { ModelProps } from './Model';
 
 type ModelFormProps = {
     initialData: Partial<ModelProps>;
-    onSubmit: (modelData: Omit<ModelProps, 'id'>) => void;
+    onSubmit: (modelData: any) => void;
     onCancel: () => void;
 };
 
@@ -21,10 +21,10 @@ const ModelForm: React.FC<ModelFormProps> = ({ initialData, onSubmit, onCancel }
         luggageCapacity: initialData.luggageCapacity || 2,
         airConditioning: initialData.airConditioning ?? true,
         infotainmentSystem: initialData.infotainmentSystem ?? true,
-        safetyRating: initialData.safetyRating || 5,
+        safetyRating: initialData.safetyRating || 5
     });
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value, type } = e.target;
         const checked = type === 'checkbox' ? (e.target as HTMLInputElement).checked : undefined;
 
@@ -40,7 +40,27 @@ const ModelForm: React.FC<ModelFormProps> = ({ initialData, onSubmit, onCancel }
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        onSubmit(formData);
+
+        const mappedData = {
+            brand: formData.brand,
+            model: formData.model,
+            modelYear: formData.year,
+            segment: formData.segment,
+            doors: formData.doors,
+            seatingCapacity: formData.seats,
+            luggageCapacity: formData.luggageCapacity,
+            category: formData.segment,
+            engineType: formData.fuelType,
+            transmissionType: formData.transmission,
+            drivetrain: 'FWD', // puoi renderlo dinamico se vuoi
+            motorDisplacement: 1.6, // default temporaneo
+            airConditioning: formData.airConditioning,
+            infotainmentOptions: formData.infotainmentSystem ? 'Standard' : 'None',
+            safetyFeatures: 'Basic', // oppure da un campo textarea
+            rentalPricePerDay: formData.pricePerDay
+        };
+
+        onSubmit(mappedData);
     };
 
     const segments = ['Sedan', 'SUV', 'Hatchback', 'Coupe', 'Convertible', 'Minivan'];
@@ -56,123 +76,48 @@ const ModelForm: React.FC<ModelFormProps> = ({ initialData, onSubmit, onCancel }
                     <div className="row">
                         <div className="col-md-6 mb-3">
                             <label className="form-label">Brand*</label>
-                            <input
-                                type="text"
-                                className="form-control"
-                                name="brand"
-                                value={formData.brand}
-                                onChange={handleChange}
-                                required
-                            />
+                            <input type="text" className="form-control" name="brand" value={formData.brand} onChange={handleChange} required />
                         </div>
                         <div className="col-md-6 mb-3">
                             <label className="form-label">Model*</label>
-                            <input
-                                type="text"
-                                className="form-control"
-                                name="model"
-                                value={formData.model}
-                                onChange={handleChange}
-                                required
-                            />
+                            <input type="text" className="form-control" name="model" value={formData.model} onChange={handleChange} required />
                         </div>
                     </div>
 
                     <div className="row">
                         <div className="col-md-4 mb-3">
                             <label className="form-label">Year*</label>
-                            <input
-                                type="number"
-                                className="form-control"
-                                name="year"
-                                value={formData.year}
-                                onChange={handleChange}
-                                min="2000"
-                                max={new Date().getFullYear() + 1}
-                                required
-                            />
+                            <input type="number" className="form-control" name="year" value={formData.year} onChange={handleChange} required />
                         </div>
                         <div className="col-md-4 mb-3">
                             <label className="form-label">Segment*</label>
-                            <select
-                                className="form-select"
-                                name="segment"
-                                value={formData.segment}
-                                onChange={handleChange}
-                                required
-                            >
-                                {segments.map(segment => (
-                                    <option key={segment} value={segment}>{segment}</option>
-                                ))}
+                            <select className="form-select" name="segment" value={formData.segment} onChange={handleChange}>
+                                {segments.map(s => <option key={s} value={s}>{s}</option>)}
                             </select>
                         </div>
                         <div className="col-md-4 mb-3">
                             <label className="form-label">Price/Day (€)*</label>
-                            <input
-                                type="number"
-                                className="form-control"
-                                name="pricePerDay"
-                                value={formData.pricePerDay}
-                                onChange={handleChange}
-                                min="0"
-                                step="5"
-                                required
-                            />
+                            <input type="number" className="form-control" name="pricePerDay" value={formData.pricePerDay} onChange={handleChange} required />
                         </div>
                     </div>
 
                     <div className="row">
                         <div className="col-md-3 mb-3">
                             <label className="form-label">Doors*</label>
-                            <input
-                                type="number"
-                                className="form-control"
-                                name="doors"
-                                value={formData.doors}
-                                onChange={handleChange}
-                                min="2"
-                                max="5"
-                                required
-                            />
+                            <input type="number" className="form-control" name="doors" value={formData.doors} onChange={handleChange} required />
                         </div>
                         <div className="col-md-3 mb-3">
                             <label className="form-label">Seats*</label>
-                            <input
-                                type="number"
-                                className="form-control"
-                                name="seats"
-                                value={formData.seats}
-                                onChange={handleChange}
-                                min="2"
-                                max="9"
-                                required
-                            />
+                            <input type="number" className="form-control" name="seats" value={formData.seats} onChange={handleChange} required />
                         </div>
                         <div className="col-md-3 mb-3">
                             <label className="form-label">Luggage Capacity*</label>
-                            <input
-                                type="number"
-                                className="form-control"
-                                name="luggageCapacity"
-                                value={formData.luggageCapacity}
-                                onChange={handleChange}
-                                min="1"
-                                max="10"
-                                required
-                            />
+                            <input type="number" className="form-control" name="luggageCapacity" value={formData.luggageCapacity} onChange={handleChange} required />
                         </div>
                         <div className="col-md-3 mb-3">
                             <label className="form-label">Safety Rating*</label>
-                            <select
-                                className="form-select"
-                                name="safetyRating"
-                                value={formData.safetyRating}
-                                onChange={handleChange}
-                                required
-                            >
-                                {safetyRatings.map(rating => (
-                                    <option key={rating} value={rating}>{rating} ★</option>
-                                ))}
+                            <select className="form-select" name="safetyRating" value={formData.safetyRating} onChange={handleChange}>
+                                {safetyRatings.map(r => <option key={r} value={r}>{r} ★</option>)}
                             </select>
                         </div>
                     </div>
@@ -180,85 +125,32 @@ const ModelForm: React.FC<ModelFormProps> = ({ initialData, onSubmit, onCancel }
                     <div className="row">
                         <div className="col-md-6 mb-3">
                             <label className="form-label">Fuel Type*</label>
-                            <select
-                                className="form-select"
-                                name="fuelType"
-                                value={formData.fuelType}
-                                onChange={handleChange}
-                                required
-                            >
-                                {fuelTypes.map(type => (
-                                    <option key={type} value={type}>
-                                        {type.charAt(0).toUpperCase() + type.slice(1)}
-                                    </option>
-                                ))}
+                            <select className="form-select" name="fuelType" value={formData.fuelType} onChange={handleChange}>
+                                {fuelTypes.map(type => <option key={type} value={type}>{type}</option>)}
                             </select>
                         </div>
                         <div className="col-md-6 mb-3">
                             <label className="form-label">Transmission*</label>
-                            <select
-                                className="form-select"
-                                name="transmission"
-                                value={formData.transmission}
-                                onChange={handleChange}
-                                required
-                            >
-                                {transmissions.map(trans => (
-                                    <option key={trans} value={trans}>
-                                        {trans.charAt(0).toUpperCase() + trans.slice(1)}
-                                    </option>
-                                ))}
+                            <select className="form-select" name="transmission" value={formData.transmission} onChange={handleChange}>
+                                {transmissions.map(trans => <option key={trans} value={trans}>{trans}</option>)}
                             </select>
                         </div>
                     </div>
 
                     <div className="row">
-                        <div className="col-md-6 mb-3">
-                            <div className="form-check">
-                                <input
-                                    className="form-check-input"
-                                    type="checkbox"
-                                    name="airConditioning"
-                                    checked={formData.airConditioning}
-                                    onChange={handleChange}
-                                    id="airConditioningCheck"
-                                />
-                                <label className="form-check-label" htmlFor="airConditioningCheck">
-                                    Air Conditioning
-                                </label>
-                            </div>
+                        <div className="col-md-6 mb-3 form-check">
+                            <input className="form-check-input" type="checkbox" name="airConditioning" checked={formData.airConditioning} onChange={handleChange} />
+                            <label className="form-check-label">Air Conditioning</label>
                         </div>
-                        <div className="col-md-6 mb-3">
-                            <div className="form-check">
-                                <input
-                                    className="form-check-input"
-                                    type="checkbox"
-                                    name="infotainmentSystem"
-                                    checked={formData.infotainmentSystem}
-                                    onChange={handleChange}
-                                    id="infotainmentCheck"
-                                />
-                                <label className="form-check-label" htmlFor="infotainmentCheck">
-                                    Infotainment System
-                                </label>
-                            </div>
+                        <div className="col-md-6 mb-3 form-check">
+                            <input className="form-check-input" type="checkbox" name="infotainmentSystem" checked={formData.infotainmentSystem} onChange={handleChange} />
+                            <label className="form-check-label">Infotainment System</label>
                         </div>
                     </div>
 
-                    <div className="d-flex justify-content-end gap-2 mt-4">
-                        <button
-                            type="button"
-                            className="btn btn-outline-secondary"
-                            onClick={onCancel}
-                        >
-                            Cancel
-                        </button>
-                        <button
-                            type="submit"
-                            className="btn btn-primary"
-                        >
-                            {initialData.id ? 'Update' : 'Save'} Model
-                        </button>
+                    <div className="d-flex justify-content-end gap-2">
+                        <button type="button" className="btn btn-outline-secondary" onClick={onCancel}>Cancel</button>
+                        <button type="submit" className="btn btn-primary">{initialData.id ? 'Update' : 'Save'} Model</button>
                     </div>
                 </form>
             </div>

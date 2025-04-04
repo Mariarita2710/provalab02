@@ -48,7 +48,14 @@ const CarModelsPage: React.FC = () => {
                 </button>
             </div>
 
-            {showForm && <ModelForm onSubmit={handleAddModel} />}
+            {showForm && (
+                <ModelForm
+                    initialData={{}} // 👈 questo evita il crash
+                    onSubmit={handleAddModel}
+                    onCancel={() => setShowForm(false)} // opzionale ma consigliato
+                />
+            )}
+
 
             <div className="row">
                 {models.map((model) => (
