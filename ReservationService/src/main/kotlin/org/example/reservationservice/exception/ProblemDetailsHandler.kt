@@ -23,4 +23,9 @@ class ProblemDetailsHandler {
         e.printStackTrace() // utile in fase di debug
         return ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, e.message ?: "Unexpected error")
     }
+
+    @ExceptionHandler(CarModelNotFoundException::class)
+    fun handleCarModelNotFound(e: CarModelNotFoundException): ProblemDetail {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, e.message ?: "Car model not found")
+    }
 }

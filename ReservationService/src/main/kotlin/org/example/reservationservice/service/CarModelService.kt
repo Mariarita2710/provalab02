@@ -41,7 +41,7 @@ class CarModelService(
             .toResponseDTO()
 
     fun create(request: CarModelRequestDTO): CarModelResponseDTO {
-        if (repository.existsByBrandAndModelAndModelYear(request.brand, request.model, request.modelYear)) {
+        if (repository.existsByBrandAndModel(request.brand, request.model)) {
             throw DuplicateCarModel("Car model '${request.brand} ${request.model} ${request.modelYear}' already exists")
         }
         val saved = repository.save(request.toEntity())

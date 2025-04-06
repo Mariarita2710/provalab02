@@ -11,7 +11,8 @@ import org.springframework.stereotype.Repository
 @Repository
 interface CarModelRepository : JpaRepository<CarModel, Long> {
 
-    fun existsByBrandAndModelAndModelYear(brand: String, model: String, modelYear: Int): Boolean
+
+    fun existsByBrandAndModel(brand: String, model: String): Boolean
 
     @Query("""
         SELECT c FROM CarModel c
