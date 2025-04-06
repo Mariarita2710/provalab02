@@ -28,4 +28,8 @@ class ProblemDetailsHandler {
     fun handleCarModelNotFound(e: CarModelNotFoundException): ProblemDetail {
         return ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, e.message ?: "Car model not found")
     }
+
+    @ExceptionHandler(DuplicateVehicleException::class)
+    fun handleDuplicateVehicle(e: DuplicateVehicleException): ProblemDetail =
+        ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, e.message ?: "Duplicate vehicle")
 }

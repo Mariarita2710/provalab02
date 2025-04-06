@@ -3,6 +3,7 @@ package org.example.reservationservice.service
 import org.example.reservationservice.dto.VehicleRequestDTO
 import org.example.reservationservice.dto.VehicleResponseDTO
 import org.example.reservationservice.exception.VehicleNotFound
+import org.example.reservationservice.exception.DuplicateVehicleException
 import org.example.reservationservice.exception.CarModelNotFoundException
 import org.example.reservationservice.model.Vehicle
 import org.example.reservationservice.model.VehicleStatus
@@ -32,6 +33,9 @@ class VehicleService(
     }
 
     fun create(request: VehicleRequestDTO): VehicleResponseDTO {
+        if (vehicleRepository.existsByLicensePlate(request.licensePlate)) {
+            throw DuplicateVehicleException("Vehicle with license plate '${request.licensePlate}' already exists.")
+        }
         val carModel = carModelRepository.findById(request.carModelId)
             .orElseThrow { CarModelNotFoundException("Car model with ID ${request.carModelId} not found") }
 
