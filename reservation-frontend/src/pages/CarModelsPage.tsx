@@ -15,9 +15,12 @@ const CarModelsPage: React.FC = () => {
                 const data = await fetchCarModels();
                 setModels(data.content); // Assuming paginated response
                 setLoading(false);
-            } catch (err) {
-                setError(err.message);
-                setLoading(false);
+            } catch (err: unknown) {
+                if (err instanceof Error) {
+                    setError(err.message);
+                } else {
+                    setError("Unknown error");
+                }
             }
         };
         loadModels();

@@ -1,4 +1,5 @@
 export type VehicleProps = {
+    carModelId: number;
     id: number;
     licensePlate: string;
     vin: string;

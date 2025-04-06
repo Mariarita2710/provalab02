@@ -20,8 +20,12 @@ const FleetPage: React.FC = () => {
                 setVehicles(vehiclesData.content);
                 setCarModels(modelsData.content);
                 setLoading(false);
-            } catch (err) {
-                setError(err.message);
+            } catch (err: unknown) {
+                if (err instanceof Error) {
+                    setError(err.message);
+                } else {
+                    setError("Unknown error");
+                }
                 setLoading(false);
             }
         };
