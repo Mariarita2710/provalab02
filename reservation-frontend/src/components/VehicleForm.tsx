@@ -1,9 +1,16 @@
 import React, { useState } from "react";
 import { VehicleProps } from "./Vehicle";
 
+type CarModelOption = {
+    id: number;
+    brand: string;
+    model: string;
+    year: number;
+};
+
 type VehicleFormProps = {
     onSubmit: (vehicleData: Omit<VehicleProps, 'id'>) => void;
-    carModels: any[];
+    carModels: CarModelOption[];
     initialData?: Partial<VehicleProps>;
 };
 
@@ -31,7 +38,13 @@ const VehicleForm: React.FC<VehicleFormProps> = ({
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        onSubmit(formData);
+
+        const preparedData = {
+            ...formData,
+            carModelId: Number(formData.carModelId),
+        };
+
+        onSubmit(preparedData);
     };
 
     return (

@@ -3,6 +3,7 @@ import Model, { ModelProps } from "../components/Model";
 import { fetchCarModels, createCarModel } from "../services/api";
 import ModelForm from "../components/ModelForm";
 
+
 const CarModelsPage: React.FC = () => {
     const [models, setModels] = useState<ModelProps[]>([]);
     const [loading, setLoading] = useState(true);
@@ -23,16 +24,22 @@ const CarModelsPage: React.FC = () => {
                 }
             }
         };
-        loadModels();
+        loadModels().catch((err) => {
+            console.error("Unhandled loadModels error:", err);
+        });
     }, []);
 
-    const handleAddModel = async (modelData: any) => {
+    const handleAddModel = async (modelData: Omit<ModelProps, 'id'>) => {
         try {
             const newModel = await createCarModel(modelData);
             setModels([...models, newModel]);
             setShowForm(false);
-        } catch (err) {
-            setError(err.message);
+        } catch (err: unknown) {
+            if (err instanceof Error) {
+                setError(err.message);
+            } else {
+                setError("Unknown error");
+            }
         }
     };
 

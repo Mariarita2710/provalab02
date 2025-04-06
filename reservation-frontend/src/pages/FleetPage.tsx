@@ -3,12 +3,20 @@ import Vehicle, { VehicleProps } from "../components/Vehicle";
 import { fetchVehicles , fetchCarModels, createVehicle} from "../services/api.ts";
 import VehicleForm from "../components/VehicleForm";
 
+
+type CarModelOption = {
+    id: number;
+    brand: string;
+    model: string;
+    year: number;
+};
+
 const FleetPage: React.FC = () => {
     const [vehicles, setVehicles] = useState<VehicleProps[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [showForm, setShowForm] = useState(false);
-    const [carModels, setCarModels] = useState<any[]>([]);
+    const [carModels, setCarModels] = useState<CarModelOption[]>([]);
 
     useEffect(() => {
         const loadData = async () => {
@@ -26,19 +34,26 @@ const FleetPage: React.FC = () => {
                 } else {
                     setError("Unknown error");
                 }
+
                 setLoading(false);
             }
         };
-        loadData();
+        loadData().catch((err) => {
+            console.error("Unhandled loadModels error:", err);
+        });
     }, []);
 
-    const handleAddVehicle = async (vehicleData: any) => {
+    const handleAddVehicle = async (vehicleData: Omit<VehicleProps, 'id'>) => {
         try {
             const newVehicle = await createVehicle(vehicleData);
             setVehicles([...vehicles, newVehicle]);
             setShowForm(false);
-        } catch (err) {
-            setError(err.message);
+        } catch (err: unknown) {
+            if (err instanceof Error) {
+                setError(err.message);
+            } else {
+                setError("Unknown error");
+            }
         }
     };
 
