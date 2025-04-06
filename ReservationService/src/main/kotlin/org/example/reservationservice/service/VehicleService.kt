@@ -9,6 +9,7 @@ import org.example.reservationservice.model.Vehicle
 import org.example.reservationservice.model.VehicleStatus
 import org.example.reservationservice.repository.CarModelRepository
 import org.example.reservationservice.repository.VehicleRepository
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
@@ -19,6 +20,8 @@ class VehicleService(
     private val vehicleRepository: VehicleRepository,
     private val carModelRepository: CarModelRepository
 ) {
+    private val logger = LoggerFactory.getLogger(VehicleService::class.java)
+
 
     fun findAll(): List<VehicleResponseDTO> =
         vehicleRepository.findAll().map { VehicleResponseDTO.from(it) }
@@ -51,7 +54,11 @@ class VehicleService(
             carModel = carModel
         )
 
-        return VehicleResponseDTO.from(vehicleRepository.save(vehicle))
+        val saved = vehicleRepository.save(vehicle)
+
+        logger.info("Created vehicle with ID ${saved.id}, license plate '${saved.licensePlate}'")
+
+        return VehicleResponseDTO.from(saved)
     }
 
     fun update(id: Long, request: VehicleRequestDTO): VehicleResponseDTO {
@@ -73,7 +80,11 @@ class VehicleService(
             carModel = carModel
         )
 
-        return VehicleResponseDTO.from(vehicleRepository.save(updated))
+        val saved = vehicleRepository.save(updated)
+
+        logger.info("Updated vehicle with ID ${saved.id}")
+
+        return VehicleResponseDTO.from(saved)
     }
 
     fun delete(id: Long) {
@@ -81,5 +92,6 @@ class VehicleService(
             throw VehicleNotFound(id)
         }
         vehicleRepository.deleteById(id)
+        logger.info("Deleted vehicle with ID $id")
     }
 }

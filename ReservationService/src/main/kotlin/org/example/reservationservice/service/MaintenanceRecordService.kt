@@ -7,6 +7,7 @@ import org.example.reservationservice.exception.VehicleNotFound
 import org.example.reservationservice.model.MaintenanceRecord
 import org.example.reservationservice.repository.MaintenanceRecordRepository
 import org.example.reservationservice.repository.VehicleRepository
+import org.slf4j.LoggerFactory
 import org.springframework.data.domain.Page
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -18,6 +19,8 @@ class MaintenanceRecordService(
     private val maintenanceRecordRepository: MaintenanceRecordRepository,
     private val vehicleRepository: VehicleRepository
 ) {
+
+    private val logger = LoggerFactory.getLogger(MaintenanceRecordService::class.java)
 
     fun findByVehicleId(vehicleId: Long): List<MaintenanceRecordResponseDTO> {
         val records = maintenanceRecordRepository.findByVehicleId(vehicleId)
@@ -54,7 +57,9 @@ class MaintenanceRecordService(
             maintenanceDate = request.maintenanceDate ?: LocalDateTime.now()
         )
 
-        return MaintenanceRecordResponseDTO.from(maintenanceRecordRepository.save(record))
+        val saved = maintenanceRecordRepository.save(record)
+        logger.info("Created maintenance record ID ${saved.id} for vehicle ID ${vehicleId}")
+        return MaintenanceRecordResponseDTO.from(saved)
     }
 
     @Transactional
@@ -69,7 +74,9 @@ class MaintenanceRecordService(
             maintenanceDate = request.maintenanceDate ?: LocalDateTime.now()
         )
 
-        return MaintenanceRecordResponseDTO.from(maintenanceRecordRepository.save(updated))
+        val saved = maintenanceRecordRepository.save(updated)
+        logger.info("Updated maintenance record ID $id")
+        return MaintenanceRecordResponseDTO.from(saved)
     }
 
     fun delete(id: Long) {
@@ -77,5 +84,6 @@ class MaintenanceRecordService(
             throw MaintenanceRecordNotFound(id)
         }
         maintenanceRecordRepository.deleteById(id)
+        logger.info("Deleted maintenance record ID $id")
     }
 }

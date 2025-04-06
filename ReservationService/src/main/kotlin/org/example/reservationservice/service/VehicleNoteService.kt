@@ -7,6 +7,7 @@ import org.example.reservationservice.exception.VehicleNotFound
 import org.example.reservationservice.model.VehicleNote
 import org.example.reservationservice.repository.VehicleNoteRepository
 import org.example.reservationservice.repository.VehicleRepository
+import org.slf4j.LoggerFactory
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
@@ -18,6 +19,8 @@ class VehicleNoteService(
     private val vehicleNoteRepository: VehicleNoteRepository,
     private val vehicleRepository: VehicleRepository
 ) {
+
+    private val logger = LoggerFactory.getLogger(VehicleNoteService::class.java)
 
     fun findByVehicleIdWithFilters(
         vehicleId: Long,
@@ -40,7 +43,9 @@ class VehicleNoteService(
             createdAt = request.createdAt ?: LocalDateTime.now()
         )
 
-        return VehicleNoteResponseDTO.from(vehicleNoteRepository.save(note))
+        val saved = vehicleNoteRepository.save(note)
+        logger.info("Created note ID ${saved.id} for vehicle ID $vehicleId by '${saved.author}'")
+        return VehicleNoteResponseDTO.from(saved)
     }
 
     @Transactional
@@ -53,7 +58,9 @@ class VehicleNoteService(
             createdAt = request.createdAt ?: existing.createdAt
         )
 
-        return VehicleNoteResponseDTO.from(vehicleNoteRepository.save(updated))
+        val saved = vehicleNoteRepository.save(updated)
+        logger.info("Updated note ID $noteId")
+        return VehicleNoteResponseDTO.from(saved)
     }
 
     fun delete(noteId: Long) {
@@ -61,5 +68,6 @@ class VehicleNoteService(
             throw VehicleNoteNotFound(noteId)
         }
         vehicleNoteRepository.deleteById(noteId)
+        logger.info("Deleted note ID $noteId")
     }
 }
