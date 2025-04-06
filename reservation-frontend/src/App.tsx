@@ -20,7 +20,7 @@ function ErrorFallback({ error, resetErrorBoundary }: any) {
 
 function App() {
     return (
-        <Router>
+        <Router basename="/ui">
             <NavbarComponent />
             <ErrorBoundary FallbackComponent={ErrorFallback}>
                 <Routes>

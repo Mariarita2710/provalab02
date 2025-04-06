@@ -9,4 +9,9 @@ export default defineConfig({
     host: true, // Rende il server accessibile da altri dispositivi
     port: 5173, // Facoltativo, per specificare la porta
   },
+  base: '/ui/', // 👈 importante per routing corretto in produzione
+  build: {
+    emptyOutDir: true,
+    outDir: '../ReservationService/src/main/resources/ui', // 👈 build direttamente nel backend
+  },
 })
