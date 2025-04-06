@@ -3,6 +3,7 @@ package org.example.reservationservice.service
 import org.example.reservationservice.dto.VehicleRequestDTO
 import org.example.reservationservice.dto.VehicleResponseDTO
 import org.example.reservationservice.exception.VehicleNotFound
+import org.example.reservationservice.exception.CarModelNotFoundException
 import org.example.reservationservice.model.Vehicle
 import org.example.reservationservice.model.VehicleStatus
 import org.example.reservationservice.repository.CarModelRepository
@@ -32,7 +33,7 @@ class VehicleService(
 
     fun create(request: VehicleRequestDTO): VehicleResponseDTO {
         val carModel = carModelRepository.findById(request.carModelId)
-            .orElseThrow { IllegalArgumentException("CarModel with ID ${request.carModelId} not found") }
+            .orElseThrow { CarModelNotFoundException("Car model with ID ${request.carModelId} not found") }
 
         val statusEnum = VehicleStatus.valueOf(request.status.uppercase())
 
