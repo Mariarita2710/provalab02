@@ -14,7 +14,7 @@ export type ModelProps = {
     luggageCapacity: number;
     fuelType: 'petrol' | 'diesel' | 'hybrid' | 'electric';
     transmission: 'manual' | 'automatic';
-    pricePerDay: number;
+    rentalPricePerDay: number;
     airConditioning: boolean;
     infotainmentSystem: boolean;
     safetyRating: number;
@@ -33,7 +33,7 @@ const Model: React.FC<ModelProps> = ({
                                          luggageCapacity,
                                          fuelType,
                                          transmission,
-                                         pricePerDay,
+                                         rentalPricePerDay,
                                          airConditioning,
                                          infotainmentSystem,
                                          safetyRating,
@@ -98,7 +98,7 @@ const Model: React.FC<ModelProps> = ({
                         luggageCapacity,
                         fuelType,
                         transmission,
-                        pricePerDay,
+                        rentalPricePerDay,
                         airConditioning,
                         infotainmentSystem,
                         safetyRating
@@ -162,7 +162,7 @@ const Model: React.FC<ModelProps> = ({
 
                 <div className="mt-3">
                     <h5 className="text-success">
-                        {pricePerDay?.toLocaleString('en-US', {
+                        {rentalPricePerDay?.toLocaleString('en-US', {
                             style: 'currency',
                             currency: 'EUR',
                             minimumFractionDigits: 0

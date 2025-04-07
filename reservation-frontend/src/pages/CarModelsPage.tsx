@@ -60,9 +60,9 @@ const CarModelsPage: React.FC = () => {
 
             {showForm && (
                 <ModelForm
-                    initialData={{}} // 👈 questo evita il crash
+                    initialData={{}}
                     onSubmit={handleAddModel}
-                    onCancel={() => setShowForm(false)} // opzionale ma consigliato
+                    onCancel={() => setShowForm(false)}
                 />
             )}
 

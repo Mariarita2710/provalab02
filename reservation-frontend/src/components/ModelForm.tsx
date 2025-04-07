@@ -17,7 +17,7 @@ const ModelForm: React.FC<ModelFormProps> = ({ initialData, onSubmit, onCancel }
         seats: initialData.seats || 5,
         fuelType: initialData.fuelType || 'petrol',
         transmission: initialData.transmission || 'automatic',
-        pricePerDay: initialData.pricePerDay || 50,
+        rentalPricePerDay: initialData.rentalPricePerDay || 50,
         luggageCapacity: initialData.luggageCapacity || 2,
         airConditioning: initialData.airConditioning ?? true,
         infotainmentSystem: initialData.infotainmentSystem ?? true,
@@ -52,12 +52,12 @@ const ModelForm: React.FC<ModelFormProps> = ({ initialData, onSubmit, onCancel }
             category: formData.segment,
             engineType: formData.fuelType,
             transmissionType: formData.transmission,
-            drivetrain: 'FWD', // puoi renderlo dinamico se vuoi
-            motorDisplacement: 1.6, // default temporaneo
+            drivetrain: 'FWD',
+            motorDisplacement: 1.6,
             airConditioning: formData.airConditioning,
             infotainmentOptions: formData.infotainmentSystem ? 'Standard' : 'None',
-            safetyFeatures: 'Basic', // oppure da un campo textarea
-            rentalPricePerDay: formData.pricePerDay
+            safetyFeatures: 'Basic',
+            rentalPricePerDay: formData.rentalPricePerDay
         };
 
         onSubmit(mappedData);
@@ -97,7 +97,7 @@ const ModelForm: React.FC<ModelFormProps> = ({ initialData, onSubmit, onCancel }
                         </div>
                         <div className="col-md-4 mb-3">
                             <label className="form-label">Price/Day (€)*</label>
-                            <input type="number" className="form-control" name="pricePerDay" value={formData.pricePerDay} onChange={handleChange} required />
+                            <input type="number" className="form-control" name="rentalPricePerDay" value={formData.rentalPricePerDay} onChange={handleChange} required />
                         </div>
                     </div>
 
